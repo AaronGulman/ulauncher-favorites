@@ -1,0 +1,14 @@
+{
+	"id": "favorites-extension",
+	"name": "Favorites Extension",
+	"description": "Quickly access your favorite files and folders",
+	"version": "1.0",
+	"author": "Your Name",
+	"icon": "images/favorites.png",
+	"main": "main.py",
+	"requirements": {
+	    "python": ">=3.0",
+	    "ulauncher": ">=5.0"
+	}
+    }
+    
