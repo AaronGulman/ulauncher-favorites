@@ -1,14 +1,20 @@
 {
-	"id": "favorites-extension",
-	"name": "Favorites Extension",
-	"description": "Quickly access your favorite files and folders",
-	"version": "1.0",
-	"author": "Your Name",
+	"required_api_version": "^2.0.0",
+	"name": "Favorites",
+	"description": "Quickly access favorite files and folders",
+	"developer_name": "Aaron Gulman",
 	"icon": "images/favorites.png",
-	"main": "main.py",
-	"requirements": {
-	    "python": ">=3.0",
-	    "ulauncher": ">=5.0"
-	}
-    }
-    
+	"options": {
+	  "query_debounce": 0.1
+	},
+	"preferences": [
+	  {
+	    "id": "keyword",
+	    "type": "keyword",
+	    "name": "Favorites Extension",
+	    "description": "The keyword to start the Favorites extension",
+	    "default_value": "f"
+	  }
+	]
+      }
+      

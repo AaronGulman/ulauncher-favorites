@@ -1,6 +1,9 @@
-[
-	{
-	  "required_api_version": "1",
-	  "commit": "main"
-	}
-      ]
+{
+	"versions": [
+	    {
+		"version": "1.0",
+		"url": "https://github.com/AaronGulman/ulauncher-favorites/archive/refs/tags/v1.0.zip"
+	    }
+	]
+    }
+    
