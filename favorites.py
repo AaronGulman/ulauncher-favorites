@@ -1,5 +1,5 @@
-from ulauncher.api.client.Extension import Extension
-from ulauncher.api.client.EventListener import EventListener
+from ulauncher.api.client import Extension
+from ulauncher.api.client import EventListener
 from ulauncher.api.shared.event import KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
@@ -14,11 +14,11 @@ class FavoritesExtension(Extension):
 class KeywordQueryEventListener(EventListener):
     def on_event(self, event, extension):
         try:
-            code_command = extension.preferences.get("code_command", "code") 
-            favorites = extension.preferences.get("favorites", [])
-            
+            code_command = extension.preferences.get("code_command", "code")  
+            favorites = extension.preferences.get("favorites", [])  
+
             items = []
-            query = event.get_argument()
+            query = event.get_argument()  
 
             if query:
                 favorites = [fav for fav in favorites if query.lower() in fav.lower()]
