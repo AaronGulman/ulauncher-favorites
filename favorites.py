@@ -1,54 +1,55 @@
-from ulauncher.api.client import Extension
-from ulauncher.api.client import EventListener
+import logging
+import os
+from ulauncher.api.client.Extension import Extension
+from ulauncher.api.client.EventListener import EventListener
 from ulauncher.api.shared.event import KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
-from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
-from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
-from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
+from ulauncher.api.shared.action.OpenUrlAction import OpenUrlAction
 
-class FavoritesExtension(Extension):
-    def __init__(self):
-        super().__init__()
-        self.subscribe(KeywordQueryEvent, KeywordQueryEventListener())
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 class KeywordQueryEventListener(EventListener):
     def on_event(self, event, extension):
-        try:
-            code_command = extension.preferences.get("code_command", "code")  
-            favorites = extension.preferences.get("favorites", [])  
+        query = event.get_argument() or ""
+        favorites = extension.get_favorites()
+        items = []
 
-            items = []
-            query = event.get_argument()  
+        for path in favorites:
+            if query.lower() in os.path.basename(path).lower():
+                item = ExtensionResultItem(
+                    icon='images/favorites.png',
+                    name=os.path.basename(path),
+                    description=f"Path: {path}",
+                    on_enter=OpenUrlAction(f"file://{path}"),
+                )
+                items.append(item)
 
-            if query:
-                favorites = [fav for fav in favorites if query.lower() in fav.lower()]
+        if not items:
+            items.append(
+                ExtensionResultItem(
+                    icon='images/favorites.png',
+                    name="No matches found",
+                    description="Try a different query.",
+                    on_enter=None,
+                )
+            )
 
-            if favorites:
-                for favorite in favorites:
-                    items.append(ExtensionResultItem(
-                        icon='images/icon.png',
-                        name=favorite,
-                        description=f'Favorite: {favorite}',
-                        on_enter=RunScriptAction(f"{code_command} {favorite}")
-                    ))
-            else:
-                items.append(ExtensionResultItem(
-                    icon='images/icon.png',
-                    name='No favorites found',
-                    description='No favorites matching your query.',
-                    on_enter=HideWindowAction()
-                ))
+        return items
 
-            return RenderResultListAction(items)
 
-        except Exception as e:
-            print(f"Error: {e}")
-            return RenderResultListAction([ExtensionResultItem(
-                icon='images/icon.png',
-                name="Error",
-                description="An error occurred.",
-                on_enter=HideWindowAction()
-            )])
+class FavoritesExtension(Extension):
+    def __init__(self):
+        super(FavoritesExtension, self).__init__()
+        self.subscribe(KeywordQueryEvent, KeywordQueryEventListener())
 
-if __name__ == '__main__':
+    def get_favorites(self):
+        favorites_raw = self.preferences.get("favorites", "")
+        favorites = [fav.strip() for fav in favorites_raw.split(",") if fav.strip()]
+        logger.debug(f"Loaded favorites: {favorites}")
+        return favorites
+
+
+if __name__ == "__main__":
     FavoritesExtension().run()
