@@ -14,6 +14,20 @@
 	    "name": "Favorites Extension",
 	    "description": "The keyword to start the Favorites extension",
 	    "default_value": "f"
+	  },
+	  {
+	    "id": "favorites",
+	    "type": "text",
+	    "name": "Favorites",
+	    "description": "Comma-separated list of favorite files and folders",
+	    "default_value": "/path/to/favorite1,/path/to/favorite2"
+	  },
+	  {
+	    "id": "code_command",
+	    "type": "text",
+	    "name": "Code Command",
+	    "description": "Command to open files in your editor (default: 'code')",
+	    "default_value": "code"
 	  }
 	]
       }
